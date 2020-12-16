@@ -1,8 +1,9 @@
-package skipList
+package skiplist
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_GetFirstInRange(t *testing.T) {
@@ -34,6 +35,4 @@ func Test_GetFirstInRange(t *testing.T) {
 
 	ret = skl.GetFirstInRange(6)
 	assert.Nil(t, ret)
-
-	skl.Delete(5)
 }

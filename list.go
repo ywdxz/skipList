@@ -1,4 +1,4 @@
-package skipList
+package skiplist
 
 import (
 	//"container/list"
@@ -8,9 +8,17 @@ import (
 )
 
 const (
-	SKIPLIST_MAXLEVEL         = 32
-	SKIPLIST_P        float64 = 0.25
+	// SkipListMaxLevel :
+	SkipListMaxLevel = 32
+	// SkipListP :
+	SkipListP float64 = 0.25
 )
+
+// SkipLister :
+type SkipLister interface {
+	Insert(score uint64, val interface{})
+	GetFirstInRange(score uint64) (ret *skipListNode)
+}
 
 func randomLevel() int {
 
@@ -18,15 +26,15 @@ func randomLevel() int {
 
 	rand.Seed(time.Now().Unix())
 
-	for float64(rand.Int63n(0xFFFF)) < (SKIPLIST_P * float64(0xFFFF)) {
+	for float64(rand.Int63n(0xFFFF)) < (SkipListP * float64(0xFFFF)) {
 		level++
 	}
 
-	if level < SKIPLIST_MAXLEVEL {
+	if level < SkipListMaxLevel {
 		return level
 	}
 
-	return SKIPLIST_MAXLEVEL
+	return SkipListMaxLevel
 
 }
 
@@ -48,7 +56,7 @@ type skipListNode struct {
 	forWard []*skipListNode
 }
 
-func CreateNode(level int, score uint64, val interface{}) *skipListNode {
+func createNode(level int, score uint64, val interface{}) *skipListNode {
 
 	return &skipListNode{
 		forWard:  make([]*skipListNode, level),
@@ -58,19 +66,21 @@ func CreateNode(level int, score uint64, val interface{}) *skipListNode {
 	}
 }
 
-func Create() *skipList {
+// Create :
+func Create() SkipLister {
 
 	return &skipList{
-		head:   CreateNode(SKIPLIST_MAXLEVEL, 0, nil),
+		head:   createNode(SkipListMaxLevel, 0, nil),
 		tail:   nil,
 		length: 0,
 		level:  0,
 	}
 }
 
+// Insert
 func (sk *skipList) Insert(score uint64, val interface{}) {
 
-	update := make([]*skipListNode, SKIPLIST_MAXLEVEL)
+	update := make([]*skipListNode, SkipListMaxLevel)
 
 	x := sk.head
 
@@ -91,7 +101,7 @@ func (sk *skipList) Insert(score uint64, val interface{}) {
 		sk.level = level
 	}
 
-	x = CreateNode(level, score, val)
+	x = createNode(level, score, val)
 
 	for i := 0; i < level; i++ {
 		x.forWard[i] = update[i].forWard[i]
@@ -114,9 +124,10 @@ func (sk *skipList) Insert(score uint64, val interface{}) {
 	return
 }
 
+// Delete
 func (sk *skipList) Delete(score uint64) {
 
-	update := make([]*skipListNode, SKIPLIST_MAXLEVEL)
+	update := make([]*skipListNode, SkipListMaxLevel)
 
 	x := sk.head
 
@@ -153,6 +164,7 @@ func (sk *skipList) deleteNode(x *skipListNode, update []*skipListNode) {
 	return
 }
 
+// GetFirstInRange
 func (sk *skipList) GetFirstInRange(score uint64) (ret *skipListNode) {
 
 	ret = nil
@@ -171,6 +183,7 @@ func (sk *skipList) GetFirstInRange(score uint64) (ret *skipListNode) {
 	return
 }
 
+// GetLastInRange
 func (sk *skipList) GetLastInRange(score uint64) (ret *skipListNode) {
 
 	x := sk.head
