@@ -51,7 +51,7 @@ type skipListNode struct {
 
 	score uint64
 
-	backWard *skipListNode
+	// backWard *skipListNode
 
 	forWard []*skipListNode
 }
@@ -59,10 +59,10 @@ type skipListNode struct {
 func createNode(level int, score uint64, val interface{}) *skipListNode {
 
 	return &skipListNode{
-		forWard:  make([]*skipListNode, level),
-		score:    score,
-		val:      val,
-		backWard: nil,
+		forWard: make([]*skipListNode, level, SkipListMaxLevel),
+		score:   score,
+		val:     val,
+		// backWard: nil,
 	}
 }
 
@@ -108,16 +108,18 @@ func (sk *skipList) Insert(score uint64, val interface{}) {
 		update[i].forWard[i] = x
 	}
 
-	x.backWard = update[0]
-	if update[0] == sk.head {
-		x.backWard = nil
-	}
+	/*
+			x.backWard = update[0]
+			if update[0] == sk.head {
+				x.backWard = nil
+			}
 
-	if x.forWard[0] != nil {
-		x.forWard[0].backWard = x
-	} else {
-		sk.tail = x
-	}
+		if x.forWard[0] != nil {
+			x.forWard[0].backWard = x
+		} else {
+			sk.tail = x
+		}
+	*/
 
 	sk.length++
 
