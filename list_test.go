@@ -117,3 +117,35 @@ func Test_GetByIndex(t *testing.T) {
 	val = skl.GetByIndex(4)
 	assert.Equal(t, "5", val)
 }
+
+//Benchmark
+//go test -bench=. -benchmem -benchtime=10s
+//=======================================
+// BenchmarkSkiplist-4       111519            827404 ns/op             304 B/op          2 allocs/op
+func BenchmarkSkiplist(b *testing.B) {
+
+	skl := Create()
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		skl.Set(uint64(i), ".")
+		skl.GetByScore(uint64(i))
+	}
+}
+
+//Benchmark
+//go test -bench=. -benchmem -benchtime=10s
+//=======================================
+// BenchmarkMap-4          40033868               344 ns/op              98 B/op          0 allocs/op
+func BenchmarkMap(b *testing.B) {
+
+	mp := make(map[uint64]string)
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		mp[uint64(i)] = "."
+		_ = mp[uint64(i)]
+	}
+}
