@@ -16,8 +16,12 @@ const (
 
 // SkipLister :
 type SkipLister interface {
-	Insert(score uint64, val interface{})
-	GetFirstInRange(score uint64) (ret *skipListNode)
+	Set(score uint64, val interface{})
+	GetByScore(score uint64) interface{}
+	GetByIndex(index int) interface{}
+	Len() int
+	Del(score uint64)
+	// GetFirstInRange(score uint64) (ret *skipListNode)
 }
 
 func randomLevel() int {
