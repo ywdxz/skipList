@@ -42,8 +42,8 @@ func Test_Set_Get_Del(t *testing.T) {
 	val = skl.GetByScore(5)
 	assert.Equal(t, "55", val)
 
-	skl.Del(6)
-	skl.Del(5)
+	skl.DelByScore(6)
+	skl.DelByScore(5)
 	val = skl.GetByScore(5)
 	assert.Nil(t, val)
 }
@@ -66,19 +66,19 @@ func Test_Len(t *testing.T) {
 	len = skl.Len()
 	assert.Equal(t, 3, len)
 
-	skl.Del(4)
+	skl.DelByScore(4)
 	len = skl.Len()
 	assert.Equal(t, 2, len)
 
-	skl.Del(1)
+	skl.DelByScore(1)
 	len = skl.Len()
 	assert.Equal(t, 1, len)
 
-	skl.Del(15)
+	skl.DelByScore(15)
 	len = skl.Len()
 	assert.Equal(t, 0, len)
 
-	skl.Del(15)
+	skl.DelByScore(15)
 	len = skl.Len()
 	assert.Equal(t, 0, len)
 }
